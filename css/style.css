@@ -1,2 +1,84 @@
 /* style.css */
-/* Your custom CSS goes here */
+
+body{
+    /* background:whitesmoke; */
+    background: #e6dbc7;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+h1{
+    /* font-family: 'Lobster', cursive; */
+    font-family: 'Castoro Titling', cursive;
+}
+
+.navbar{
+    background: rgb(230,219,199);
+    background: linear-gradient(101deg, rgba(230,219,199,1) 0%, rgba(78,34,40,1) 48%, rgba(229,166,120,1) 100%);
+}
+
+.category_link{
+    color: #4e2228;
+    text-decoration: none;
+}
+
+footer{
+    font-size: 20px;
+}
+
+nav{
+    font-size: 20px;
+}
+
+.category > ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.category>ul>li{
+    float: left;
+    font-size: 20px;
+}
+
+.category>ul>li a{
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.category>ul>li a:hover{
+    text-decoration: underline;
+}
+
+.tags > ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.tags>ul>li{
+    float: left;
+    font-size: 20px;
+}
+
+.tags>ul>li a{
+    display: inline-block;
+    color: black;
+    text-align: center;
+    margin: 10px;
+    padding: 10px 10px;
+    text-decoration: none;
+}
+
+.tags>ul>li a:hover{
+    text-decoration: none;
+}
+
+a{
+    color: black;
+}
+a:hover{
+    color: brown;
+}

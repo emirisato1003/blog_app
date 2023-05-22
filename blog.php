@@ -5,7 +5,10 @@ require "inc/header.inc.php";
 
 <div class="container mt-3">
     <div class="row">
-        <h1 class="mb-5">Bruce's Technology Blog</h1>
+        <div class="col-12 header">
+            <h1 class="mt-5 display-1 text-center">Simply Living Bliss</h1>
+            <img src="https://picsum.photos/id/184/1500/400" class="img-fluid" alt="">
+        </div>
         <?php
         // SQL to get all blog posts. Note the use of a JOIN
         $sql = "SELECT post.post_id, post.title, post.date, post.content, author.author_id, author.first_name, author.last_name 
@@ -16,43 +19,31 @@ require "inc/header.inc.php";
         // PDO Prepared Statements
         $stmt = $db->prepare($sql);
         $stmt->execute();
-
         // Fetch all of the row(s)
         $data = $stmt->fetchAll();
-
         // Iterate through each of the rows
         foreach ($data as $row) {
-            // Create HTML for each blog entry
-            echo "<div class='col-12 mb-5'>";
-            // Blog Title
-            echo "<h2>{$row->title}</h2>";
-            echo "<hr>";
-            // Take the date and convert it to a PHP date object
-            $date = date_create($row->date);
-            // Show blog post author and format the date
-            echo "<p class='fw-bold'>{$row->first_name} {$row->last_name} - " . $date->format('M d, Y')  . "</p>";
-
-            // Now get the categories for this post with SQL JOIN
             $sql = "SELECT post_category.post_id, post_category.category_id, category.category 
                     FROM post_category 
                     JOIN category 
                     ON post_category.category_id = category.category_id 
                     WHERE post_category.post_id = :post_id";
 
-            // PDO Prepared statements
             $stmt_category = $db->prepare($sql);
             $stmt_category->execute(["post_id" => $row->post_id]);
             $categories = $stmt_category->fetchAll();
 
-            // Generate an unordered list with categories
-            echo "<p>Category</p>";
-            echo "<ul>";
-            foreach ($categories as $category_row) {
-                echo "<li>{$category_row->category}</li>";
-            }
-            echo "</ul>";
+            echo "<div class='col-12 col-md-4 my-5'>"; //blog content column
+            echo "<h2 class='fw-bold fs-1 fst-italic'>{$row->title}</h2>";
+            echo "<hr>";
+            $date = date_create($row->date);
+            echo "<p>{$date->format('M d, Y')} | {$row->first_name} {$row->last_name}</p>";
+            echo format_array_contents($categories, "category");
 
-            // Now get the tags for this post with SQL JOIN
+            // Show the blog post content
+            $content = limit_text($row->content, 40);
+            echo "<p>{$content}</p>";
+            echo "<a href='single.php?id={$row->post_id}' class='fst-italic' title='Read the post'>Read more</a>";
             $sql = "SELECT post_tag.post_id, post_tag.tag_id, tag.tag 
                     FROM post_tag 
                     JOIN tag 
@@ -63,23 +54,12 @@ require "inc/header.inc.php";
             $stmt_tag = $db->prepare($sql);
             $stmt_tag->execute(["post_id" => $row->post_id]);
             $tags = $stmt_tag->fetchAll();
-
-            // Generate an unordered list with tags
-            echo "<p>Tag(s)</p>";
-            echo "<ul>";
-            foreach ($tags as $tag_row) {
-                echo "<li>{$tag_row->tag}</li>";
-            }
-            echo "</ul>";
-
-            // Show the blog post content
-            $content = limit_text($row->content, 15);
-            echo "<p>{$content}</p>";
-            echo "<a href='single.php?id={$row->post_id}' title='Read the post'>Read more ></a>";
+            echo format_array_contents($tags, "tag");
             echo "</div>"; // closing .col-12
         } // end of loop for Posts
         ?>
     </div> <!-- Closing for .row -->
-    <?php
-    require "inc/footer.inc.php";
-    ?>
+</div>
+<?php
+require "inc/footer.inc.php";
+?>
